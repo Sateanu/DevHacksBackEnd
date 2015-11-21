@@ -66,6 +66,14 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="Clusters">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Latitude" Type="float" Nullable="false" />
+          <Property Name="Longitude" Type="float" Nullable="false" />
+        </EntityType>
         <EntityType Name="Foods">
           <Key>
             <PropertyRef Name="Id" />
@@ -90,6 +98,8 @@
           <Property Name="Latitude" Type="float" Nullable="false" />
           <Property Name="Longitude" Type="float" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Done" Type="int" Nullable="false" />
+          <Property Name="ClusterID" Type="int" />
         </EntityType>
         <EntityType Name="Restaurants">
           <Key>
@@ -186,6 +196,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orders_Clusters">
+          <End Role="Clusters" Type="Self.Clusters" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clusters">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ClusterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orders_Restaurants">
           <End Role="Restaurants" Type="Self.Restaurants" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
@@ -195,6 +217,18 @@
             </Principal>
             <Dependent Role="Orders">
               <PropertyRef Name="RestaurantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -234,6 +268,7 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clusters" EntityType="Self.Clusters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Foods" EntityType="Self.Foods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Restaurants" EntityType="Self.Restaurants" Schema="dbo" store:Type="Tables" />
@@ -259,8 +294,16 @@
             <End Role="Restaurants" EntitySet="Restaurants" />
             <End Role="Foods" EntitySet="Foods" />
           </AssociationSet>
+          <AssociationSet Name="FK_Orders_Clusters" Association="Self.FK_Orders_Clusters">
+            <End Role="Clusters" EntitySet="Clusters" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orders_Restaurants" Association="Self.FK_Orders_Restaurants">
             <End Role="Restaurants" EntitySet="Restaurants" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK_Suborders_Foods" Association="Self.FK_Suborders_Foods">
@@ -363,6 +406,10 @@
           <Property Name="Latitude" Type="Double" Nullable="false" />
           <Property Name="Longitude" Type="Double" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Done" Type="Int32" Nullable="false" />
+          <Property Name="ClusterID" Type="Int32" />
+          <NavigationProperty Name="Clusters" Relationship="Model.FK_Orders_Clusters" FromRole="Orders" ToRole="Clusters" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
         </EntityType>
         <EntityType Name="Restaurants">
           <Key>
@@ -394,6 +441,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Model.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -519,6 +567,15 @@
             <Parameter Name="longitude" Mode="In" Type="Double" />
             <Parameter Name="radius" Mode="In" Type="Double" />
           </FunctionImport>
+          <EntitySet Name="Clusters" EntityType="Model.Clusters" />
+          <AssociationSet Name="FK_Orders_Clusters" Association="Model.FK_Orders_Clusters">
+            <End Role="Clusters" EntitySet="Clusters" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Model.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetOrdersInArea_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -530,6 +587,39 @@
           <Property Type="Double" Name="Longitude" Nullable="false" />
           <Property Type="Double" Name="Distance" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Clusters">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Model.FK_Orders_Clusters" FromRole="Clusters" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_Orders_Clusters">
+          <End Type="Model.Clusters" Role="Clusters" Multiplicity="0..1" />
+          <End Type="Model.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clusters">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ClusterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Type="Model.Users" Role="Users" Multiplicity="1" />
+          <End Type="Model.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -607,6 +697,8 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="Model.Orders">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="ClusterID" ColumnName="ClusterID" />
+                <ScalarProperty Name="Done" ColumnName="Done" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />
@@ -670,6 +762,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Clusters">
+            <EntityTypeMapping TypeName="Model.Clusters">
+              <MappingFragment StoreEntitySet="Clusters">
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

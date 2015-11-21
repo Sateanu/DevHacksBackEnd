@@ -250,6 +250,9 @@
     <Compile Include="Models\AspNetUsers.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Clusters.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>

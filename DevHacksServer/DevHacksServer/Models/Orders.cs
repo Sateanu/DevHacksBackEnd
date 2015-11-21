@@ -28,9 +28,13 @@ namespace DevHacksServer.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public int UserID { get; set; }
+        public int Done { get; set; }
+        public Nullable<int> ClusterID { get; set; }
     
         public virtual Restaurants Restaurants { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Suborders> Suborders { get; set; }
+        public virtual Clusters Clusters { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

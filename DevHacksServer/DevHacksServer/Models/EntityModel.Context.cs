@@ -37,6 +37,7 @@ namespace DevHacksServer.Models
         public virtual DbSet<Restaurants> Restaurants { get; set; }
         public virtual DbSet<Suborders> Suborders { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Clusters> Clusters { get; set; }
     
         public virtual ObjectResult<GetOrdersInArea_Result> GetOrdersInArea(Nullable<double> latitude, Nullable<double> longitude, Nullable<double> radius)
         {
