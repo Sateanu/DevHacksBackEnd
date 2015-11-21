@@ -7,7 +7,7 @@ namespace DevHacksServer.Models
 {
     public static class Extensions
     {
-        public static Restaurant toModel(this Restaurants rest)
+        public static Restaurant ToModel(this Restaurants rest)
         {
             return new Restaurant()
             {
@@ -20,7 +20,7 @@ namespace DevHacksServer.Models
             };
         }
 
-        public static Food toModel(this Foods food)
+        public static Food ToModel(this Foods food)
         {
             return new Food()
             {
@@ -33,6 +33,43 @@ namespace DevHacksServer.Models
                 Price = food.Price
             };
 
+        }
+
+        public static Suborder ToModel(this Suborders sb)
+        {
+            return new Suborder()
+            {
+                Id = sb.Id,
+                FoodID = sb.FoodID,
+                OrderID = sb.OrderID,
+                Quantity = sb.Quantity
+            };
+        }
+
+        public static Order ToModel(this Orders o)
+        {
+            Order newOrder = new Order();
+
+            newOrder.Id = o.Id;
+            newOrder.Price = o.Price;
+            newOrder.RestaurantID = o.RestaurantID;
+            newOrder.Discount = o.Discount;
+            newOrder.Time = o.Time;
+            newOrder.Latitude = o.Latitude;
+            newOrder.Longitude = o.Longitude;
+            newOrder.Suborders = new List<Suborder>();
+            foreach (var sub in o.Suborders)
+            {
+                newOrder.Suborders.Add(sub.ToModel());
+            }
+
+            return newOrder;
+            
+        }
+
+        public static double ToRadians(this double d)
+        {
+            return (Math.PI / 180) * d;
         }
 
     }

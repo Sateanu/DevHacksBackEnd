@@ -25,6 +25,8 @@ namespace DevHacksServer.Models
         public double Price { get; set; }
         public int Discount { get; set; }
         public long Time { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     
         public virtual Restaurants Restaurants { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

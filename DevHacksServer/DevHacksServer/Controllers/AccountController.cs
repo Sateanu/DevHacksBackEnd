@@ -13,7 +13,6 @@ using System.Web.Security;
 
 namespace DevHacksServer.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;

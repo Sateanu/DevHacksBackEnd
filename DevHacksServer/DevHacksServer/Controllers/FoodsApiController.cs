@@ -48,7 +48,7 @@ namespace DevHacksServer.Controllers
 
         public Food GetFood(int id)
         {
-            return db.Foods.Find(id).toModel();
+            return db.Foods.Find(id).ToModel();
         }
 
 

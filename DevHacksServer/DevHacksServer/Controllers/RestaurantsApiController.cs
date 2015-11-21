@@ -38,7 +38,7 @@ namespace DevHacksServer.Controllers
             {
                 return null;
             }
-            return restaurants.toModel();
+            return restaurants.ToModel();
         }
 
         // PUT: api/RestaurantsApi/5

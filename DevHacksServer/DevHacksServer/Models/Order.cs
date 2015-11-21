@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DevHacksServer.Models
+{
+    public class Order
+    {
+        public int Id { get; set; }
+        public int RestaurantID { get; set; }
+        public double Price { get; set; }
+        public int Discount { get; set; }
+        public long Time { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public List<Suborder> Suborders { get; set; }
+    }
+}
