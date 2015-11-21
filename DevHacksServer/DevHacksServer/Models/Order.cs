@@ -16,5 +16,22 @@ namespace DevHacksServer.Models
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public List<Suborder> Suborders { get; set; }
+
+        internal Orders ToEntity()
+        {
+            Orders order = new Orders();
+            order.Discount = Discount;
+            order.Id = Id;
+            order.RestaurantID = RestaurantID;
+            order.Price = Price;
+            order.Time = Time;
+            order.Longitude = Longitude;
+            order.Latitude = Latitude;
+            foreach (var so in Suborders)
+            {
+                order.Suborders.Add(so.ToEntity());
+            }
+            return order;
+        }
     }
 }

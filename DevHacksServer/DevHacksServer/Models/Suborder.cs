@@ -12,5 +12,16 @@ namespace DevHacksServer.Models
         public int FoodID { get; set; }
         public int OrderID { get; set; }
         public int Quantity { get; set; }
+
+        internal Suborders ToEntity()
+        {
+            return new Suborders()
+            {
+                Id=Id,
+                FoodID=FoodID,
+                OrderID=OrderID,
+                Quantity=Quantity
+            };
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace DevHacksServer.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class Entities : DbContext
     {
@@ -35,5 +37,22 @@ namespace DevHacksServer.Models
         public virtual DbSet<Restaurants> Restaurants { get; set; }
         public virtual DbSet<Suborders> Suborders { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+    
+        public virtual ObjectResult<GetOrdersInArea_Result> GetOrdersInArea(Nullable<double> latitude, Nullable<double> longitude, Nullable<double> radius)
+        {
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("latitude", latitude) :
+                new ObjectParameter("latitude", typeof(double));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("longitude", longitude) :
+                new ObjectParameter("longitude", typeof(double));
+    
+            var radiusParameter = radius.HasValue ?
+                new ObjectParameter("radius", radius) :
+                new ObjectParameter("radius", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrdersInArea_Result>("GetOrdersInArea", latitudeParameter, longitudeParameter, radiusParameter);
+        }
     }
 }

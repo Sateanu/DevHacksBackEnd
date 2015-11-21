@@ -19,9 +19,10 @@ namespace DevHacksServer.Controllers
             return db.Orders.ToList().Select(x => x.ToModel());
         }
         [HttpPost]
-        public void PutOrder(Order order)
+        public void PostOrder(Order order)
         {
-
+            db.Orders.Add(order.ToEntity());
+            db.SaveChanges();
         }
     }
 }
