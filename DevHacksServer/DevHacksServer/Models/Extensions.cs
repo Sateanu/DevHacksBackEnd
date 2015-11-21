@@ -19,5 +19,21 @@ namespace DevHacksServer.Models
                 Name=rest.Name
             };
         }
+
+        public static Food toModel(this Foods food)
+        {
+            return new Food()
+            {
+                Id = food.Id,
+                Image = food.Image,
+                Category = food.Category,
+                Name = food.Name,
+                RestaurantID = food.RestaurantID,
+                Description = food.Description,
+                Price = food.Price
+            };
+
+        }
+
     }
 }

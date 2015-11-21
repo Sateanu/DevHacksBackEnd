@@ -215,6 +215,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FoodsApiController.cs" />
     <Compile Include="Controllers\FoodsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -264,6 +265,7 @@
       <DependentUpon>EntityModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Extensions.cs" />
+    <Compile Include="Models\Food.cs" />
     <Compile Include="Models\Foods.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>

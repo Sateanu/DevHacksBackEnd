@@ -31,15 +31,14 @@ namespace DevHacksServer.Controllers
         }
 
         // GET: api/RestaurantsApi/5
-        [ResponseType(typeof(Restaurants))]
-        public IHttpActionResult GetRestaurants(int id)
+        public Restaurant GetRestaurants(int id)
         {
             Restaurants restaurants = db.Restaurants.Find(id);
             if (restaurants == null)
             {
-                return NotFound();
+                return null;
             }
-            return Ok(restaurants.toModel());
+            return restaurants.toModel();
         }
 
         // PUT: api/RestaurantsApi/5
