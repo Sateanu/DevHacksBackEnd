@@ -256,6 +256,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetClustersInArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="latitude" Type="float" Mode="In" />
+          <Parameter Name="longitude" Type="float" Mode="In" />
+          <Parameter Name="radius" Type="float" Mode="In" />
+        </Function>
         <Function Name="GetOrdersInArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="latitude" Type="float" Mode="In" />
           <Parameter Name="longitude" Type="float" Mode="In" />
@@ -576,17 +581,12 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
+          <FunctionImport Name="GetClustersInArea" ReturnType="Collection(Model.GetClustersInArea_Result)">
+            <Parameter Name="latitude" Mode="In" Type="Double" />
+            <Parameter Name="longitude" Mode="In" Type="Double" />
+            <Parameter Name="radius" Mode="In" Type="Double" />
+          </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="GetOrdersInArea_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="Int32" Name="RestaurantID" Nullable="false" />
-          <Property Type="Double" Name="Price" Nullable="false" />
-          <Property Type="Int32" Name="Discount" Nullable="false" />
-          <Property Type="Int64" Name="Time" Nullable="false" />
-          <Property Type="Double" Name="Latitude" Nullable="false" />
-          <Property Type="Double" Name="Longitude" Nullable="false" />
-          <Property Type="Double" Name="Distance" Nullable="true" />
-        </ComplexType>
         <EntityType Name="Clusters">
           <Key>
             <PropertyRef Name="Id" />
@@ -620,6 +620,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetClustersInArea_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Double" Name="Distance" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetOrdersInArea_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="RestaurantID" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Int32" Name="Discount" Nullable="false" />
+          <Property Type="Int64" Name="Time" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="Done" Nullable="false" />
+          <Property Type="Int32" Name="ClusterID" Nullable="true" />
+          <Property Type="Double" Name="Distance" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -758,6 +777,9 @@
                 <ScalarProperty Name="Time" ColumnName="Time" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Done" ColumnName="Done" />
+                <ScalarProperty Name="ClusterID" ColumnName="ClusterID" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -771,6 +793,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetClustersInArea" FunctionName="Model.Store.GetClustersInArea">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.GetClustersInArea_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -15,6 +15,9 @@ namespace DevHacksServer.Models
         public long Time { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
+        public int UserID { get; set; }
+        public int Done { get; set; }
+        public Nullable<int> ClusterID { get; set; }
         public List<Suborder> Suborders { get; set; }
 
         internal Orders ToEntity()
@@ -27,6 +30,9 @@ namespace DevHacksServer.Models
             order.Time = Time;
             order.Longitude = Longitude;
             order.Latitude = Latitude;
+            order.UserID = UserID;
+            order.Done = Done;
+            order.ClusterID = ClusterID;
             foreach (var so in Suborders)
             {
                 order.Suborders.Add(so.ToEntity());

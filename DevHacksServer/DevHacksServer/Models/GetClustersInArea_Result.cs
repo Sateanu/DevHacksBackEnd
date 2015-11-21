@@ -11,18 +11,11 @@ namespace DevHacksServer.Models
 {
     using System;
     
-    public partial class GetOrdersInArea_Result
+    public partial class GetClustersInArea_Result
     {
         public int Id { get; set; }
-        public int RestaurantID { get; set; }
-        public double Price { get; set; }
-        public int Discount { get; set; }
-        public long Time { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public int UserID { get; set; }
-        public int Done { get; set; }
-        public Nullable<int> ClusterID { get; set; }
         public Nullable<double> Distance { get; set; }
     }
 }

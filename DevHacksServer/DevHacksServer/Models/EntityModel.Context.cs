@@ -55,5 +55,22 @@ namespace DevHacksServer.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrdersInArea_Result>("GetOrdersInArea", latitudeParameter, longitudeParameter, radiusParameter);
         }
+    
+        public virtual ObjectResult<GetClustersInArea_Result> GetClustersInArea(Nullable<double> latitude, Nullable<double> longitude, Nullable<double> radius)
+        {
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("latitude", latitude) :
+                new ObjectParameter("latitude", typeof(double));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("longitude", longitude) :
+                new ObjectParameter("longitude", typeof(double));
+    
+            var radiusParameter = radius.HasValue ?
+                new ObjectParameter("radius", radius) :
+                new ObjectParameter("radius", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetClustersInArea_Result>("GetClustersInArea", latitudeParameter, longitudeParameter, radiusParameter);
+        }
     }
 }

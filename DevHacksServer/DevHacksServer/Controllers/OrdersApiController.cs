@@ -32,8 +32,25 @@ namespace DevHacksServer.Controllers
 
         public void PostOrder(Order order)
         {
-            db.Orders.Add(order.ToEntity());
-            db.SaveChanges();
+            var clusters = db.GetClustersInArea(order.Latitude, order.Longitude, Constants.MaxRadius);
+            if (clusters.Count() > 0)
+            {
+                foreach (var cluster in clusters)
+                {
+                    
+                }
+            }
+            else
+            {
+                var a = db.Clusters.Add(new Clusters() {Latitude=order.Latitude,Longitude=order.Longitude });
+                db.SaveChanges();
+                order.ClusterID = a.Id;
+                db.Orders.Add(order.ToEntity());
+                db.SaveChanges();
+            }
+
+            //db.Orders.Add(order.ToEntity());
+            //db.SaveChanges();
         }
     }
 }

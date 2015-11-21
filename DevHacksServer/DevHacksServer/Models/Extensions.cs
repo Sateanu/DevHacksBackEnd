@@ -57,6 +57,9 @@ namespace DevHacksServer.Models
             newOrder.Time = o.Time;
             newOrder.Latitude = o.Latitude;
             newOrder.Longitude = o.Longitude;
+            newOrder.ClusterID = o.ClusterID;
+            newOrder.UserID = o.UserID;
+            newOrder.Done = o.Done;
             newOrder.Suborders = new List<Suborder>();
             foreach (var sub in o.Suborders)
             {
@@ -64,7 +67,49 @@ namespace DevHacksServer.Models
             }
 
             return newOrder;
-            
+        }
+
+        public static Order ToModel(this GetOrdersInArea_Result o)
+        {
+            Order newOrder = new Order();
+
+            newOrder.Id = o.Id;
+            newOrder.Price = o.Price;
+            newOrder.RestaurantID = o.RestaurantID;
+            newOrder.Discount = o.Discount;
+            newOrder.Time = o.Time;
+            newOrder.Latitude = o.Latitude;
+            newOrder.Longitude = o.Longitude;
+            newOrder.ClusterID = o.ClusterID;
+            newOrder.UserID = o.UserID;
+            newOrder.Done = o.Done;
+            newOrder.Suborders = new List<Suborder>();
+            Entities db = new Entities();
+            var suborders = db.Suborders.Where(x => x.OrderID == o.Id);
+            foreach (var sub in suborders)
+            {
+                newOrder.Suborders.Add(sub.ToModel());
+            }
+
+            return newOrder;
+        }
+
+        public static Cluster ToModel(this Clusters cl)
+        {
+            Cluster cluster = new Cluster();
+            cluster.Id = cl.Id;
+            cluster.Latitude = cl.Latitude;
+            cluster.Longitude = cl.Longitude;
+            return cluster;
+        }
+
+        public static Cluster ToModel(this GetClustersInArea_Result cl)
+        {
+            Cluster cluster = new Cluster();
+            cluster.Id = cl.Id;
+            cluster.Latitude = cl.Latitude;
+            cluster.Longitude = cl.Longitude;
+            return cluster;
         }
 
         public static double ToRadians(this double d)
