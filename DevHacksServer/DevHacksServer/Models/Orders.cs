@@ -27,6 +27,7 @@ namespace DevHacksServer.Models
         public long Time { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public int UserID { get; set; }
     
         public virtual Restaurants Restaurants { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
