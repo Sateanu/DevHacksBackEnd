@@ -20,10 +20,17 @@ namespace DevHacksServer.Controllers
             return db.Orders.ToList().Select(x => x.ToModel());
         }
 
-        public IEnumerable<Order> GetGoodOrders()
+        public IEnumerable<Orders> GetGoodOrders()
         {
             var date = DateTime.Now.Ticks;
-            return db.Orders.Where(x=>x.Done==0&&x.Time<=date).ToList().Select(x => x.ToModel());
+            return db.Orders.Where(x => x.Done == 0 && x.Time <= date).ToList();
+        }
+
+        public void SetOrderDone(Orders order)
+        {
+            order.Done = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
         }
 
         public void SetOrderDone(int id)
@@ -46,10 +53,11 @@ namespace DevHacksServer.Controllers
             }
         }
 
-        private void KronkPullTheLever(Order order)
+        private void KronkPullTheLever(Orders order)
         {
-            //SendTheOwl("andrei.sateanu@gmail.com");
-            SendTheOwl("alexbuicescu@gmail.com");
+            SetOrderDone(order);
+            SendTheOwl("andrei.sateanu@gmail.com");
+            //SendTheOwl("alexbuicescu@gmail.com");
         }
 
         public bool SendTheOwl(string email)
