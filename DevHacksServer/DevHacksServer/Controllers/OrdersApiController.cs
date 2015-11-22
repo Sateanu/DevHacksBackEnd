@@ -136,7 +136,9 @@ namespace DevHacksServer.Controllers
 
         public Order PostOrder(Order order)
         {
-            var clusters = db.GetClustersInAreaEntity(order.Latitude, order.Longitude, Constants.MaxRadius).Where(x=>x.RestaurantID==order.RestaurantID&&x.Time==order.Time).ToList();
+            var clusters = db.GetClustersInAreaEntity(order.Latitude, order.Longitude, Constants.MaxRadius).
+                Where(x=>x.RestaurantID==order.RestaurantID&&
+                (x.Time/1000)==(order.Time/1000)).ToList();
             if (clusters!=null&&clusters.Count() > 0)
             {
                 int clMinId = -1;
@@ -181,7 +183,7 @@ namespace DevHacksServer.Controllers
                 }
                 else
                 {
-                    var a = db.Clusters.Add(new Clusters() { Latitude = order.Latitude, Longitude = order.Longitude,RestaurantID=order.RestaurantID });
+                    var a = db.Clusters.Add(new Clusters() { Latitude = order.Latitude, Longitude = order.Longitude,RestaurantID=order.RestaurantID,Time=order.Time });
                     db.SaveChanges();
                     order.ClusterID = a.Id;
                     var outputorder=db.Orders.Add(order.ToEntity());
@@ -191,7 +193,7 @@ namespace DevHacksServer.Controllers
             }
             else
             {
-                var a = db.Clusters.Add(new Clusters() {Latitude=order.Latitude,Longitude=order.Longitude,RestaurantID=order.RestaurantID });
+                var a = db.Clusters.Add(new Clusters() {Latitude=order.Latitude,Longitude=order.Longitude,RestaurantID=order.RestaurantID,Time=order.Time });
                 db.SaveChanges();
                 order.ClusterID = a.Id;
                 var outputorder=db.Orders.Add(order.ToEntity());
