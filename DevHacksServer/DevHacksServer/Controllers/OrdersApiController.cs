@@ -12,9 +12,21 @@ using System.Web.Http;
 
 namespace DevHacksServer.Controllers
 {
+    public class Location
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+
     public class OrdersApiController : ApiController
     {
         Entities db = new Entities();
+
+        [HttpPost]
+        public IEnumerable<Order> GetOrdersAroundMe(Location loc)
+        {
+            return db.GetOrdersInAreaEntity(loc.Latitude, loc.Longitude, Constants.MaxRadius).ToList().Select(x=>x.ToModel());
+        }
 
         public IEnumerable<Order> GetOrders()
         {
