@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Web.Http;
 
 namespace DevHacksServer.Controllers
@@ -18,6 +19,71 @@ namespace DevHacksServer.Controllers
         {
             return db.Orders.ToList().Select(x => x.ToModel());
         }
+
+        public IEnumerable<Order> GetGoodOrders()
+        {
+            var date = DateTime.Now.Ticks;
+            return db.Orders.Where(x=>x.Done==0&&x.Time<=date).ToList().Select(x => x.ToModel());
+        }
+
+        public void SetOrderDone(int id)
+        {
+            var order = db.Orders.Where(x => x.Id == id).FirstOrDefault();
+            if(order!=null)
+            {
+                order.Done = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public void GetMagic()
+        {
+            var orders = GetGoodOrders();
+            foreach (var order in orders)
+            {
+                KronkPullTheLever(order);
+            }
+        }
+
+        private void KronkPullTheLever(Order order)
+        {
+            //SendTheOwl("andrei.sateanu@gmail.com");
+            SendTheOwl("alexbuicescu@gmail.com");
+        }
+
+        public bool SendTheOwl(string email)
+        {
+            MailMessage msg = new MailMessage();
+
+            msg.From = new MailAddress("andrei.sateanu@gmail.com");
+            msg.To.Add(email);
+            msg.Subject = "BRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAAAAAAAA " + DateTime.Now.ToString();
+            msg.Body = "MERGE BAAAA";
+            SmtpClient client = new SmtpClient();
+            client.UseDefaultCredentials = true;
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            client.EnableSsl = true;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Credentials = new NetworkCredential("andrei.sateanu@gmail.com", "zewycawzedktrfvj");
+            client.Timeout = 20000;
+            try
+            {
+                client.Send(msg);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                msg.Dispose();
+            }
+        }
+
+
         [HttpPost]
         public IEnumerable<Order> GetOrderUser([FromBody]string email)
         {
