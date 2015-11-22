@@ -18,6 +18,11 @@ namespace DevHacksServer.Controllers
         public double Longitude { get; set; }
     }
 
+    public class JavaShitOrder
+    {
+        public Order order;
+    }
+
     public class OrdersApiController : ApiController
     {
         Entities db = new Entities();
@@ -82,9 +87,10 @@ namespace DevHacksServer.Controllers
 
             msg.From = new MailAddress("andrei.sateanu@gmail.com");
             msg.To.Add(order.Restaurants.Email);
-            msg.Subject = "Comanda Mancare: " + order.Location;
+            msg.Subject = "Comanda Mancare";
             //msg.Body = "MERGE BAAAA";
             StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("Locatia :\n{0}\n", order.Location);
             foreach (var suborder in order.Suborders)
             {
                 sb.AppendFormat("{0} x {1}\n", suborder.Foods.Name, suborder.Quantity);
@@ -115,9 +121,9 @@ namespace DevHacksServer.Controllers
 
 
         [HttpPost]
-        public IEnumerable<Order> GetOrderUser([FromBody]string email)
+        public IEnumerable<Order> GetOrderUser(LoginModel email)
         {
-            var user = db.Users.Where(x => x.Email == email).FirstOrDefault();
+            var user = db.Users.Where(x => x.Email == email.email).FirstOrDefault();
             if (user == null)
                 return null;
 
@@ -126,7 +132,7 @@ namespace DevHacksServer.Controllers
 
         }
 
-        public void PostOrder(Order order)
+        public Order PostOrder(Order order)
         {
             var clusters = db.GetClustersInAreaEntity(order.Latitude, order.Longitude, Constants.MaxRadius).Where(x=>x.RestaurantID==order.RestaurantID&&x.Time==order.Time).ToList();
             if (clusters!=null&&clusters.Count() > 0)
@@ -167,16 +173,18 @@ namespace DevHacksServer.Controllers
                     cl.Latitude = clNewLat;
                     cl.Longitude = clNewLong;
                     db.Entry(cl).State = System.Data.Entity.EntityState.Modified;
-                    db.Orders.Add(order.ToEntity());
+                    var outputorder=db.Orders.Add(order.ToEntity());
                     db.SaveChanges();
+                    return outputorder.ToModel();
                 }
                 else
                 {
                     var a = db.Clusters.Add(new Clusters() { Latitude = order.Latitude, Longitude = order.Longitude,RestaurantID=order.RestaurantID });
                     db.SaveChanges();
                     order.ClusterID = a.Id;
-                    db.Orders.Add(order.ToEntity());
+                    var outputorder=db.Orders.Add(order.ToEntity());
                     db.SaveChanges();
+                    return outputorder.ToModel();
                 }
             }
             else
@@ -184,8 +192,9 @@ namespace DevHacksServer.Controllers
                 var a = db.Clusters.Add(new Clusters() {Latitude=order.Latitude,Longitude=order.Longitude,RestaurantID=order.RestaurantID });
                 db.SaveChanges();
                 order.ClusterID = a.Id;
-                db.Orders.Add(order.ToEntity());
+                var outputorder=db.Orders.Add(order.ToEntity());
                 db.SaveChanges();
+                return outputorder.ToModel();
             }
 
             //db.Orders.Add(order.ToEntity());
