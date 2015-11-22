@@ -40,7 +40,7 @@ namespace DevHacksServer.Controllers
 
         public IEnumerable<Orders> GetGoodOrders()
         {
-            var date = DateTime.Now.Ticks;
+            long date= Models.Extensions.Millis;
             return db.Orders.Where(x => x.Done == 0 && x.Time <= date).ToList();
         }
 
@@ -91,10 +91,12 @@ namespace DevHacksServer.Controllers
             //msg.Body = "MERGE BAAAA";
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("Locatia :\n{0}\n", order.Location);
+            sb.AppendLine("Comanda:");
             foreach (var suborder in order.Suborders)
             {
-                sb.AppendFormat("{0} x {1}\n", suborder.Foods.Name, suborder.Quantity);
+                sb.AppendFormat("{0} x {1} - Pret: {2}\n", suborder.Foods.Name, suborder.Quantity, suborder.Foods.Price*suborder.Quantity);
             }
+            sb.AppendFormat("TOTAL: {0}\n", order.Price);
             msg.Body = sb.ToString();
             SmtpClient client = new SmtpClient();
             client.UseDefaultCredentials = true;

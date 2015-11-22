@@ -46,7 +46,7 @@ namespace DevHacksServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Specific,Latitude,Longitude,Location")] Restaurants restaurants)
+        public ActionResult Create([Bind(Include = "Id,Name,Specific,Latitude,Longitude,Location,Email,Url")] Restaurants restaurants)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace DevHacksServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Specific,Latitude,Longitude,Location")] Restaurants restaurants)
+        public ActionResult Edit([Bind(Include = "Id,Name,Specific,Latitude,Longitude,Location,Email,Url")] Restaurants restaurants)
         {
             if (ModelState.IsValid)
             {

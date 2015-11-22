@@ -29,6 +29,7 @@ namespace DevHacksServer.Models
         public double Longitude { get; set; }
         public string Location { get; set; }
         public string Email { get; set; }
+        public string Url { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Foods> Foods { get; set; }

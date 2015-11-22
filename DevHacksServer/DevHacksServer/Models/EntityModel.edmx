@@ -115,6 +115,7 @@
           <Property Name="Longitude" Type="float" Nullable="false" />
           <Property Name="Location" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Url" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Suborders">
           <Key>
@@ -461,6 +462,7 @@
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Restaurants" FromRole="Restaurants" ToRole="Orders" />
           <NavigationProperty Name="Clusters" Relationship="Model.FK_Clusters_Restaurants" FromRole="Restaurants" ToRole="Clusters" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Suborders">
           <Key>
@@ -798,6 +800,7 @@
           <EntitySetMapping Name="Restaurants">
             <EntityTypeMapping TypeName="Model.Restaurants">
               <MappingFragment StoreEntitySet="Restaurants">
+                <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

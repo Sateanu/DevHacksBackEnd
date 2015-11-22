@@ -17,17 +17,9 @@ namespace DevHacksServer.Controllers
         private Entities db = new Entities();
 
         // GET: api/RestaurantsApi
-        public IQueryable<Restaurant> GetRestaurants()
+        public IEnumerable<Restaurant> GetRestaurants()
         {
-            return db.Restaurants.Select(x => new Restaurant()
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Latitude = x.Latitude,
-                Longitude=x.Longitude,
-                Location=x.Location,
-                Specific=x.Specific
-            });
+            return db.Restaurants.ToList().Select(x => x.ToModel());
         }
 
         // GET: api/RestaurantsApi/5
