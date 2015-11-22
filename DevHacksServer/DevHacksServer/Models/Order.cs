@@ -19,6 +19,7 @@ namespace DevHacksServer.Models
         public int Done { get; set; }
         public Nullable<int> ClusterID { get; set; }
         public List<Suborder> Suborders { get; set; }
+        public string Location { get; set; }
 
         internal Orders ToEntity()
         {
@@ -33,6 +34,7 @@ namespace DevHacksServer.Models
             order.UserID = UserID;
             order.Done = Done;
             order.ClusterID = ClusterID;
+            order.Location = Location;
             foreach (var so in Suborders)
             {
                 order.Suborders.Add(so.ToEntity());

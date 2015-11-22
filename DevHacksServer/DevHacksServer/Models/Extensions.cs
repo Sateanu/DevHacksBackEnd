@@ -16,7 +16,8 @@ namespace DevHacksServer.Models
                 Longitude=rest.Longitude,
                 Location=rest.Location,
                 Specific=rest.Specific,
-                Name=rest.Name
+                Name=rest.Name,
+                Email=rest.Email
             };
         }
 
@@ -60,6 +61,7 @@ namespace DevHacksServer.Models
             newOrder.ClusterID = o.ClusterID;
             newOrder.UserID = o.UserID;
             newOrder.Done = o.Done;
+            newOrder.Location = o.Location;
             newOrder.Suborders = new List<Suborder>();
             foreach (var sub in o.Suborders)
             {
@@ -83,6 +85,7 @@ namespace DevHacksServer.Models
             newOrder.ClusterID = o.ClusterID;
             newOrder.UserID = o.UserID;
             newOrder.Done = o.Done;
+            newOrder.Location = o.Location;
             newOrder.Suborders = new List<Suborder>();
             Entities db = new Entities();
             var suborders = db.Suborders.Where(x => x.OrderID == o.Id);

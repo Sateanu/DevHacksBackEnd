@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
+using System.Text;
 using System.Web.Http;
 
 namespace DevHacksServer.Controllers
@@ -56,18 +57,27 @@ namespace DevHacksServer.Controllers
         private void KronkPullTheLever(Orders order)
         {
             SetOrderDone(order);
-            SendTheOwl("andrei.sateanu@gmail.com");
+            SendTheOwl(order);
             //SendTheOwl("alexbuicescu@gmail.com");
         }
 
-        public bool SendTheOwl(string email)
+        public bool SendTheOwl(Orders order)
         {
+            if (order.Restaurants.Email == null)
+                return false;
+
             MailMessage msg = new MailMessage();
 
             msg.From = new MailAddress("andrei.sateanu@gmail.com");
-            msg.To.Add(email);
-            msg.Subject = "BRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAAAAAAAA " + DateTime.Now.ToString();
-            msg.Body = "MERGE BAAAA";
+            msg.To.Add(order.Restaurants.Email);
+            msg.Subject = "Comanda Mancare: " + order.Location;
+            //msg.Body = "MERGE BAAAA";
+            StringBuilder sb = new StringBuilder();
+            foreach (var suborder in order.Suborders)
+            {
+                sb.AppendFormat("{0} x {1}\n", suborder.Foods.Name, suborder.Quantity);
+            }
+            msg.Body = sb.ToString();
             SmtpClient client = new SmtpClient();
             client.UseDefaultCredentials = true;
             client.Host = "smtp.gmail.com";

@@ -23,6 +23,7 @@ namespace DevHacksServer.Models
         public int UserID { get; set; }
         public int Done { get; set; }
         public Nullable<int> ClusterID { get; set; }
+        public string Location { get; set; }
         public Nullable<double> Distance { get; set; }
     }
 }

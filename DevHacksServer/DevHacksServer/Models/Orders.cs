@@ -30,6 +30,7 @@ namespace DevHacksServer.Models
         public int UserID { get; set; }
         public int Done { get; set; }
         public Nullable<int> ClusterID { get; set; }
+        public string Location { get; set; }
     
         public virtual Restaurants Restaurants { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
