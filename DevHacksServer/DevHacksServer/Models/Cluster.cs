@@ -12,6 +12,7 @@ namespace DevHacksServer.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public int RestaurantID { get; set; }
+        public long Time { get; set; }
 
         public Clusters ToEntity()
         {
@@ -20,7 +21,8 @@ namespace DevHacksServer.Models
                 Id=Id,
                 Latitude=Latitude,
                 Longitude=Longitude,
-                RestaurantID=RestaurantID
+                RestaurantID=RestaurantID,
+                Time=Time
             };
 
         }

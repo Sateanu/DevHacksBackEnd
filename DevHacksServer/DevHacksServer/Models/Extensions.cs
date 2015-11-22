@@ -101,6 +101,7 @@ namespace DevHacksServer.Models
             cluster.Latitude = cl.Latitude;
             cluster.Longitude = cl.Longitude;
             cluster.RestaurantID = cl.RestaurantID;
+            cluster.Time = cl.Time;
             return cluster;
         }
 
@@ -110,6 +111,7 @@ namespace DevHacksServer.Models
             cluster.Id = cl.Id;
             cluster.Latitude = cl.Latitude;
             cluster.Longitude = cl.Longitude;
+            cluster.Time = cl.Time;
             return cluster;
         }
 

@@ -32,7 +32,7 @@ namespace DevHacksServer.Controllers
 
         public void PostOrder(Order order)
         {
-            var clusters = db.GetClustersInAreaEntity(order.Latitude, order.Longitude, Constants.MaxRadius).Where(x=>x.RestaurantID==order.RestaurantID).ToList();
+            var clusters = db.GetClustersInAreaEntity(order.Latitude, order.Longitude, Constants.MaxRadius).Where(x=>x.RestaurantID==order.RestaurantID&&x.Time==order.Time).ToList();
             if (clusters!=null&&clusters.Count() > 0)
             {
                 int clMinId = -1;
