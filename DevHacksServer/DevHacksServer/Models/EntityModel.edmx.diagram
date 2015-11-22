@@ -25,6 +25,7 @@
         <EntityTypeShape EntityType="Model.Clusters" Width="1.5" PointX="7.375" PointY="9.75" />
         <AssociationConnector Association="Model.FK_Orders_Clusters" />
         <AssociationConnector Association="Model.FK_Orders_Users" />
+        <AssociationConnector Association="Model.FK_Clusters_Restaurants" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -23,8 +23,10 @@ namespace DevHacksServer.Models
         public int Id { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public int RestaurantID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
+        public virtual Restaurants Restaurants { get; set; }
     }
 }

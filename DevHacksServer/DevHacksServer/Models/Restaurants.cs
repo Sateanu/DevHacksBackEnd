@@ -19,6 +19,7 @@ namespace DevHacksServer.Models
         {
             this.Foods = new HashSet<Foods>();
             this.Orders = new HashSet<Orders>();
+            this.Clusters = new HashSet<Clusters>();
         }
     
         public int Id { get; set; }
@@ -32,5 +33,7 @@ namespace DevHacksServer.Models
         public virtual ICollection<Foods> Foods { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Clusters> Clusters { get; set; }
     }
 }

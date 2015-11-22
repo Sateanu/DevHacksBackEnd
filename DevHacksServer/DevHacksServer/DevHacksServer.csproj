@@ -37,7 +37,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -250,6 +250,7 @@
     <Compile Include="Models\AspNetUsers.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cluster.cs" />
     <Compile Include="Models\Clusters.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
@@ -276,6 +277,9 @@
     <Compile Include="Models\Foods.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetClustersInArea_Result.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetOrdersInArea_Result.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
@@ -300,6 +304,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\MathStuff.cs" />
   </ItemGroup>
   <ItemGroup>

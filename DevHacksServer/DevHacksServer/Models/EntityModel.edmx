@@ -73,6 +73,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Latitude" Type="float" Nullable="false" />
           <Property Name="Longitude" Type="float" Nullable="false" />
+          <Property Name="RestaurantID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Foods">
           <Key>
@@ -128,6 +129,18 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Clusters_Restaurants">
+          <End Role="Restaurants" Type="Self.Restaurants" Multiplicity="1" />
+          <End Role="Clusters" Type="Self.Clusters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurants">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clusters">
+              <PropertyRef Name="RestaurantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -261,7 +274,17 @@
           <Parameter Name="longitude" Type="float" Mode="In" />
           <Parameter Name="radius" Type="float" Mode="In" />
         </Function>
+        <Function Name="GetClustersInAreaEntity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="latitude" Type="float" Mode="In" />
+          <Parameter Name="longitude" Type="float" Mode="In" />
+          <Parameter Name="radius" Type="float" Mode="In" />
+        </Function>
         <Function Name="GetOrdersInArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="latitude" Type="float" Mode="In" />
+          <Parameter Name="longitude" Type="float" Mode="In" />
+          <Parameter Name="radius" Type="float" Mode="In" />
+        </Function>
+        <Function Name="GetOrdersInAreaEntity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="latitude" Type="float" Mode="In" />
           <Parameter Name="longitude" Type="float" Mode="In" />
           <Parameter Name="radius" Type="float" Mode="In" />
@@ -279,6 +302,10 @@
           <EntitySet Name="Restaurants" EntityType="Self.Restaurants" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Suborders" EntityType="Self.Suborders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Clusters_Restaurants" Association="Self.FK_Clusters_Restaurants">
+            <End Role="Restaurants" EntitySet="Restaurants" />
+            <End Role="Clusters" EntitySet="Clusters" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -428,6 +455,7 @@
           <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Foods" Relationship="Self.FK_Foods_Restaurants" FromRole="Restaurants" ToRole="Foods" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Restaurants" FromRole="Restaurants" ToRole="Orders" />
+          <NavigationProperty Name="Clusters" Relationship="Model.FK_Clusters_Restaurants" FromRole="Restaurants" ToRole="Clusters" />
         </EntityType>
         <EntityType Name="Suborders">
           <Key>
@@ -586,6 +614,20 @@
             <Parameter Name="longitude" Mode="In" Type="Double" />
             <Parameter Name="radius" Mode="In" Type="Double" />
           </FunctionImport>
+          <FunctionImport Name="GetClustersInAreaEntity" EntitySet="Clusters" ReturnType="Collection(Model.Clusters)">
+            <Parameter Name="latitude" Mode="In" Type="Double" />
+            <Parameter Name="longitude" Mode="In" Type="Double" />
+            <Parameter Name="radius" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="GetOrdersInAreaEntity" EntitySet="Orders" ReturnType="Collection(Model.Orders)">
+            <Parameter Name="latitude" Mode="In" Type="Double" />
+            <Parameter Name="longitude" Mode="In" Type="Double" />
+            <Parameter Name="radius" Mode="In" Type="Double" />
+          </FunctionImport>
+          <AssociationSet Name="FK_Clusters_Restaurants" Association="Model.FK_Clusters_Restaurants">
+            <End Role="Restaurants" EntitySet="Restaurants" />
+            <End Role="Clusters" EntitySet="Clusters" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Clusters">
           <Key>
@@ -595,6 +637,8 @@
           <Property Name="Latitude" Type="Double" Nullable="false" />
           <Property Name="Longitude" Type="Double" Nullable="false" />
           <NavigationProperty Name="Orders" Relationship="Model.FK_Orders_Clusters" FromRole="Clusters" ToRole="Orders" />
+          <Property Name="RestaurantID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Restaurants" Relationship="Model.FK_Clusters_Restaurants" FromRole="Clusters" ToRole="Restaurants" />
         </EntityType>
         <Association Name="FK_Orders_Clusters">
           <End Type="Model.Clusters" Role="Clusters" Multiplicity="0..1" />
@@ -620,12 +664,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="GetClustersInArea_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="Double" Name="Latitude" Nullable="false" />
-          <Property Type="Double" Name="Longitude" Nullable="false" />
-          <Property Type="Double" Name="Distance" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="GetOrdersInArea_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="Int32" Name="RestaurantID" Nullable="false" />
@@ -637,6 +675,25 @@
           <Property Type="Int32" Name="UserID" Nullable="false" />
           <Property Type="Int32" Name="Done" Nullable="false" />
           <Property Type="Int32" Name="ClusterID" Nullable="true" />
+          <Property Type="Double" Name="Distance" Nullable="true" />
+        </ComplexType>
+        <Association Name="FK_Clusters_Restaurants">
+          <End Type="Model.Restaurants" Role="Restaurants" Multiplicity="1" />
+          <End Type="Model.Clusters" Role="Clusters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurants">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clusters">
+              <PropertyRef Name="RestaurantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetClustersInArea_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Int32" Name="RestaurantID" Nullable="false" />
           <Property Type="Double" Name="Distance" Nullable="true" />
         </ComplexType>
       </Schema>
@@ -787,6 +844,7 @@
           <EntitySetMapping Name="Clusters">
             <EntityTypeMapping TypeName="Model.Clusters">
               <MappingFragment StoreEntitySet="Clusters">
+                <ScalarProperty Name="RestaurantID" ColumnName="RestaurantID" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -799,9 +857,14 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="RestaurantID" ColumnName="RestaurantID" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
               </ComplexTypeMapping>
             </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetClustersInAreaEntity" FunctionName="Model.Store.GetClustersInAreaEntity">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetOrdersInAreaEntity" FunctionName="Model.Store.GetOrdersInAreaEntity">
           </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>

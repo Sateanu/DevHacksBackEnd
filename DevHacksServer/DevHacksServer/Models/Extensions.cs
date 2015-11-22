@@ -100,6 +100,7 @@ namespace DevHacksServer.Models
             cluster.Id = cl.Id;
             cluster.Latitude = cl.Latitude;
             cluster.Longitude = cl.Longitude;
+            cluster.RestaurantID = cl.RestaurantID;
             return cluster;
         }
 
