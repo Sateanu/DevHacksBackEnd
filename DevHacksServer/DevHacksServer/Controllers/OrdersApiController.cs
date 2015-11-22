@@ -30,7 +30,7 @@ namespace DevHacksServer.Controllers
         [HttpPost]
         public IEnumerable<Order> GetOrdersAroundMe(Location loc)
         {
-            return db.GetOrdersInAreaEntity(loc.Latitude, loc.Longitude, Constants.MaxRadius).ToList().Select(x=>x.ToModel());
+            return db.GetOrdersInAreaEntity(loc.Latitude, loc.Longitude, Constants.MaxRadius).Where(x=>x.Done==0).ToList().Select(x=>x.ToModel());
         }
 
         public IEnumerable<Order> GetOrders()
